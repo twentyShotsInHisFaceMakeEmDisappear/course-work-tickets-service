@@ -41,7 +41,7 @@ public class EventController {
         String informationString = "THERE IS " + eventModelList.size() + " EVENTS!";
         model.addAttribute("count", informationString);
 
-        return "events.html";
+        return "events/events.html";
     }
 
     @GetMapping("events/{eventId}")
@@ -51,7 +51,7 @@ public class EventController {
 
         model.addAttribute("event", eventModelDto);
 
-        return "event.html";
+        return "events/event.html";
     }
 
 }

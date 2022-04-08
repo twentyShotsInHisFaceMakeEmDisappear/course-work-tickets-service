@@ -25,7 +25,7 @@ public class ArtistController {
 
         model.addAttribute("artist", artistModel);
 
-        return "artist-card.html";
+        return "artists/artist-card.html";
     }
 
     @PostMapping()
@@ -66,7 +66,7 @@ public class ArtistController {
         model.addAttribute("artists",
                 artistService.getAllArtists());
 
-        return "artists.html";
+        return "artists/artists.html";
     }
 
     @GetMapping("by-event/{idOrTitle}")
