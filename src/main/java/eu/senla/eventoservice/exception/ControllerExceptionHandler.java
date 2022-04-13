@@ -14,6 +14,7 @@ import eu.senla.eventoservice.exception.ticket.TicketNotFoundException;
 import eu.senla.eventoservice.exception.user.UserDataMismatchException;
 import eu.senla.eventoservice.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -30,13 +31,14 @@ public class ControllerExceptionHandler {
             TicketNotFoundException.class,
             CredentialsNotFoundException.class
     })
-    public String resourceNotFoundException(RuntimeException exception) {
+    public String resourceNotFoundException(Model model,
+                                            RuntimeException exception) {
         ExceptionCaughtDto exceptionCaughtDto = new ExceptionCaughtDto()
                 .setStatusId(HttpStatus.NOT_FOUND.value())
                 .setTimespan(Calendar.getInstance().getTime().toString())
                 .setMessage(exception.getMessage());
 
-        return null;
+        return "error.html";
     }
 
     @ExceptionHandler(value = {
@@ -46,23 +48,25 @@ public class ControllerExceptionHandler {
             ArtistNicknameMismatchException.class,
             CredentialWithSameDataAlreadyExistsException.class
     })
-    public String dataDuplicationException(RuntimeException exception) {
+    public String dataDuplicationException(Model model,
+                                           RuntimeException exception) {
         ExceptionCaughtDto exceptionCaughtDto = new ExceptionCaughtDto()
                 .setStatusId(HttpStatus.BAD_REQUEST.value())
                 .setTimespan(Calendar.getInstance().getTime().toString())
                 .setMessage(exception.getMessage());
 
-        return null;
+        return "error.html";
     }
 
     @ExceptionHandler(value = CameNullEntityException.class)
-    public String internalServerErrorException(RuntimeException exception) {
+    public String internalServerErrorException(Model model,
+                                               RuntimeException exception) {
         ExceptionCaughtDto exceptionCaughtDto = new ExceptionCaughtDto()
                 .setStatusId(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .setTimespan(Calendar.getInstance().getTime().toString())
                 .setMessage(exception.getMessage());
 
-        return null;
+        return "error.html";
     }
 
 }
