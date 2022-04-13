@@ -7,14 +7,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Controller
-@RequestMapping("auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    @GetMapping()
+    @GetMapping("auth")
     private String getLoginPage() {
 
         return "user/login-page.html";
+    }
+
+    @GetMapping("reg")
+    private String getRegistrationPage() {
+
+        return "user/registration.html";
     }
 
 }

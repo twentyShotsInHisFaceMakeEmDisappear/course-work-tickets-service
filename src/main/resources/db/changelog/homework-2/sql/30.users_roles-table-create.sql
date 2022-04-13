@@ -5,4 +5,4 @@ create table user_roles (
     foreign key (role_id) references roles(id)
 );
 
-insert into user_roles values (1, 2)
+insert into user_roles values (1, 2);

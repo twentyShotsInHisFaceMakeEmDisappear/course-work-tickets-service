@@ -21,7 +21,7 @@
 <div class="w3-top">
     <div class="w3-bar w3-black w3-card">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-        <a href="/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+        <a href="/static" class="w3-bar-item w3-button w3-padding-large">HOME</a>
         <a href="/events" class="w3-bar-item w3-button w3-padding-large w3-hide-small">EVENTS</a>
         <a href="/artists" class="w3-bar-item w3-button w3-padding-large w3-hide-small">ARTISTS</a>
         <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
@@ -38,16 +38,18 @@
 </div>
 
 <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
-    <h2 class="w3-wide w3-center">SIGN IN</h2>
-    <p class="w3-opacity w3-center" ><i>After signing up, you'll get access to all of our features</i></p>
-            <form action="/action_page.php" target="_blank">
+    <h2 class="w3-wide w3-center">REGISTRATION</h2>
+    <p class="w3-opacity w3-center" ><i>After registration, you'll get access to all of our features</i></p>
+    <form action="/action_page.php" target="_blank">
 
-                <input class="w3-input w3-border w3-center" style="margin-bottom: 10px; margin-top: 30px; margin-left: 240px; width: 300px" type="text" placeholder="Email" required name="Email">
+        <input class="w3-input w3-border w3-center" style="margin-bottom: 10px; margin-top: 30px; margin-left: 240px; width: 300px" type="text" placeholder="Email" required name="Email">
 
-                <input class="w3-input w3-border w3-center" style="width: 300px; margin-left: 240px;" type="text" placeholder="Password" required name="Password">
-                <button class="w3-button w3-black w3-section w3-right" style="margin-right: 287px" type="submit">SIGN IN</button>
-                <a href="/reg" class="w3-button w3-black w3-section w3-right" type="submit" style="margin-right: 10px;">SIGN UP</a>
-            </form>
+        <input class="w3-input w3-border w3-center" style="width: 300px; margin-bottom: 10px; margin-left: 240px;" type="text" placeholder="Password" required name="Password">
+
+        <input class="w3-input w3-border w3-center" style="width: 300px; margin-left: 240px;" type="text" placeholder="Repeat password" required name="PasswordConfirm">
+        <button class="w3-button w3-black w3-section w3-right" style="margin-right: 265px" type="submit">REGISTRATE</button>
+        <a href="/auth" class="w3-button w3-black w3-section w3-right" type="submit" style="margin-right: 10px;">SIGN UP</a>
+    </form>
 </div>
 
 <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
