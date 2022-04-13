@@ -13,6 +13,6 @@ public interface TicketServiceInterface {
 
     List<TicketModelDto> getAllTicketsByEventId(Long eventId);
 
-    TicketModelDto orderAnTicket(String ownerEmail, OrderTicketRequestDto orderTicketRequest);
+    TicketModelDto orderAnTicket(String ownerEmail, Long eventId);
 
 }

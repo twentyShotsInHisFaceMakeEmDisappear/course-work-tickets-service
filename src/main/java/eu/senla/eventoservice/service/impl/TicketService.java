@@ -36,11 +36,11 @@ public class TicketService implements TicketServiceInterface {
 
     @Override
     @Transactional
-    public TicketModelDto orderAnTicket(String ownerEmail, OrderTicketRequestDto orderTicketRequest) {
+    public TicketModelDto orderAnTicket(String ownerEmail, Long eventId) {
         User currentUser = userRepository.getUserByCredential_Email(ownerEmail)
                 .orElseThrow(() -> new UserNotFoundException("Something went wrong"));
 
-        Event currentEvent = eventRepository.findById(orderTicketRequest.getEventId())
+        Event currentEvent = eventRepository.findById(eventId)
                         .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         if (currentEvent.getOccupiedPlace() + 1 > currentEvent.getLocation().getCapacity())
