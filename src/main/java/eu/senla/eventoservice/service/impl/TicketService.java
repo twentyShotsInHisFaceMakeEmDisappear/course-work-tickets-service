@@ -46,11 +46,14 @@ public class TicketService implements TicketServiceInterface {
         if (currentEvent.getOccupiedPlace() + 1 > currentEvent.getLocation().getCapacity())
             throw new OutOfLocationSpaceException("Sold out");
 
+        currentEvent.setOccupiedPlace((short)(currentEvent.getOccupiedPlace() + 1));
+
         Ticket currentTicket = new Ticket()
                 .setOwner(currentUser)
                 .setEventHolding(currentEvent)
                 .setOrderDate(Calendar.getInstance().getTime());
 
+        eventRepository.save(currentEvent);
         ticketRepository.save(currentTicket);
 
         return mapper.mapToDto(currentTicket, TicketModelDto.class);

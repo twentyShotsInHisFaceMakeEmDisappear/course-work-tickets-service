@@ -14,7 +14,7 @@ public class TicketController {
 
     private final TicketServiceInterface ticketService;
 
-    @PostMapping("orders/{userEmail}")
+    @GetMapping("orders/{userEmail}")
     private String orderAnTicket(Model model,
                                  @PathVariable("userEmail") String userEmail,
                                  @RequestParam("eventId") Long eventId) {
@@ -22,7 +22,7 @@ public class TicketController {
         TicketModelDto ticketModelDto = ticketService.orderAnTicket(userEmail, eventId);
         model.addAttribute("ticket", ticketModelDto);
 
-        return "ticket-order.html";
+        return "tickets/ticket-order.html";
     }
 
 }
