@@ -8,6 +8,7 @@ import eu.senla.eventoservice.exception.credential.CredentialsNotFoundException;
 import eu.senla.eventoservice.exception.event.EventNotFoundException;
 import eu.senla.eventoservice.exception.event.EventTitleDuplicateException;
 import eu.senla.eventoservice.exception.location.LocationTitleDuplicateException;
+import eu.senla.eventoservice.exception.location.OutOfLocationSpaceException;
 import eu.senla.eventoservice.exception.other.CameNullEntityException;
 import eu.senla.eventoservice.exception.role.RoleNotFoundException;
 import eu.senla.eventoservice.exception.ticket.TicketNotFoundException;
@@ -38,11 +39,14 @@ public class ControllerExceptionHandler {
                 .setTimespan(Calendar.getInstance().getTime().toString())
                 .setMessage(exception.getMessage());
 
+        model.addAttribute("error", exceptionCaughtDto);
+
         return "error.html";
     }
 
     @ExceptionHandler(value = {
             UserDataMismatchException.class,
+            OutOfLocationSpaceException.class,
             EventTitleDuplicateException.class,
             LocationTitleDuplicateException.class,
             ArtistNicknameMismatchException.class,
@@ -55,6 +59,8 @@ public class ControllerExceptionHandler {
                 .setTimespan(Calendar.getInstance().getTime().toString())
                 .setMessage(exception.getMessage());
 
+        model.addAttribute("error", exceptionCaughtDto);
+
         return "error.html";
     }
 
@@ -65,6 +71,8 @@ public class ControllerExceptionHandler {
                 .setStatusId(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .setTimespan(Calendar.getInstance().getTime().toString())
                 .setMessage(exception.getMessage());
+
+        model.addAttribute("error", exceptionCaughtDto);
 
         return "error.html";
     }

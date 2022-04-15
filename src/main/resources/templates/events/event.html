@@ -51,7 +51,7 @@
         <img th:src="@{${event.eventOrganizer.avatar}}" class="w3-round w3-margin-bottom" style="width:30%">
         <p class="w3-opacity"><i th:utext="${event.eventOrganizer.longQuote}">...</i></p>
 
-    <a class="w3-button w3-black w3-margin-bottom" style="margin-top: 15px">ORDER AN TICKET</a><a href="/" class="w3-button w3-black w3-margin-bottom" style="margin-left: 10px; margin-top: 15px">GO BACK TO HOME</a>
+    <a th:href="@{/tickets/{eventId}(eventId=${event.id})}" class="w3-button w3-black w3-margin-bottom" style="margin-top: 15px">ORDER AN TICKET</a><a href="/" class="w3-button w3-black w3-margin-bottom" style="margin-left: 10px; margin-top: 15px">GO BACK TO HOME</a>
   </div>
 
   <!-- The Contact Section -->

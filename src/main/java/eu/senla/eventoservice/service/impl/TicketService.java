@@ -44,7 +44,7 @@ public class TicketService implements TicketServiceInterface {
                         .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         if (currentEvent.getOccupiedPlace() + 1 > currentEvent.getLocation().getCapacity())
-            throw new OutOfLocationSpaceException("Sold out");
+            throw new OutOfLocationSpaceException(currentEvent.getTitle() + " is sold out!");
 
         currentEvent.setOccupiedPlace((short)(currentEvent.getOccupiedPlace() + 1));
 
