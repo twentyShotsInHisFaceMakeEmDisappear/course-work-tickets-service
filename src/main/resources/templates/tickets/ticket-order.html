@@ -56,6 +56,19 @@
     <p class="w3-opacity"><i th:utext="${ticket.eventHolding.eventOrganizer.longQuote}">...</i></p>
 
     <a href="/events" class="w3-button w3-black w3-margin-bottom" style="margin-top: 15px">ORDER ANOTHER ONE</a><a href="/" class="w3-button w3-black w3-margin-bottom" style="margin-left: 10px; margin-top: 15px">GO BACK TO HOME</a>
+
+</div>
+
+<div class="w3-black w3-container w3-center w3-padding-64" id="tour">
+    <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
+        <h2 class="w3-wide w3-center">There is your QR-CODE</h2>
+        <p class="w3-opacity w3-center"><i>To get access to event, you should show this qr-code to the security!</i></p><br>
+
+        <img th:src="@{${ticket.qrCode}}" class="w3-round w3-margin-bottom" style="width:30%">
+
+        </div>
+
+    </div>
 </div>
 
 <!-- The Contact Section -->

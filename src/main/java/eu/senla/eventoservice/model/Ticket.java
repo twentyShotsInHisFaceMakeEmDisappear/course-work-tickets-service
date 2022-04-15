@@ -23,6 +23,9 @@ public class Ticket {
     @Column(name = "order_date")
     private Date orderDate;
 
+    @Column(name = "qr_code")
+    private String qrCode;
+
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = { CascadeType.MERGE,

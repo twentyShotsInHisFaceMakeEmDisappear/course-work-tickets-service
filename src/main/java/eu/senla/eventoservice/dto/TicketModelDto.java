@@ -26,6 +26,9 @@ public class TicketModelDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date orderDate;
 
+    @JsonProperty(value = "qrCode")
+    private String qrCode;
+
     @JsonProperty(value = "event")
     private EventModelDto eventHolding;
 

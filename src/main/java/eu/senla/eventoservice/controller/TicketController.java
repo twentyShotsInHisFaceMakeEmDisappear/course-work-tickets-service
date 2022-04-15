@@ -36,4 +36,14 @@ public class TicketController {
         return "tickets/ticket-order.html";
     }
 
+    @GetMapping("/securityCheck/{ticketId}")
+    public String getCurrentTicketById(Model model,
+                                       @PathVariable("ticketId") Long ticketId) {
+
+        TicketModelDto ticketModelDto = ticketService.getTicketById(ticketId);
+        model.addAttribute("ticket", ticketModelDto);
+
+        return "tickets/ticket-order.html";
+    }
+
 }

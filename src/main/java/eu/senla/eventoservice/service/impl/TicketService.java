@@ -16,7 +16,9 @@ import eu.senla.eventoservice.service.TicketServiceInterface;
 import eu.senla.eventoservice.util.mapper.MapperInterface;
 import liquibase.pro.packaged.T;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.util.Calendar;
@@ -25,6 +27,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TicketService implements TicketServiceInterface {
+
+    @Value("${com.company.qrCode-link}")
+    private String qrCodeGeneratorLink;
 
     private final UserRepository userRepository;
 
@@ -51,10 +56,13 @@ public class TicketService implements TicketServiceInterface {
         Ticket currentTicket = new Ticket()
                 .setOwner(currentUser)
                 .setEventHolding(currentEvent)
-                .setOrderDate(Calendar.getInstance().getTime());
+                .setOrderDate(Calendar.getInstance().getTime())
+                .setQrCode(qrCodeGeneratorLink);
 
         eventRepository.save(currentEvent);
         ticketRepository.save(currentTicket);
+
+        ticketRepository.save(currentTicket.setQrCode(currentTicket.getQrCode() + currentTicket.getId()));
 
         return mapper.mapToDto(currentTicket, TicketModelDto.class);
     }

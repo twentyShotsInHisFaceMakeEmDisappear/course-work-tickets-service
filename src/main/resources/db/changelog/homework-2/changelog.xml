@@ -82,4 +82,8 @@
         <sqlFile encoding="utf8" path="./sql/30.users_roles-table-create.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="homework-8-alter_table" author="Maksim Samsonowich">
+        <sqlFile encoding="utf8" path="./sql/31.alter-table-for-tickets.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog> 
