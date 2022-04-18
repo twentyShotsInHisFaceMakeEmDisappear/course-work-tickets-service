@@ -47,7 +47,8 @@ public class CredentialService implements CredentialServiceInterface {
         return new RequestStatusDto()
                 .setStatusId(HttpStatus.OK.value())
                 .setTimespan(Calendar.getInstance().getTime().toString())
-                .setMessage("Account successfully created");
+                .setMessage("Account successfully created. " +
+                        "You can login by your credentials.");
     }
 
     @Override

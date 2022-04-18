@@ -17,6 +17,8 @@ import eu.senla.eventoservice.util.mapper.MapperInterface;
 import liquibase.pro.packaged.T;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,6 +34,7 @@ public class TicketService implements TicketServiceInterface {
     private String qrCodeGeneratorLink;
 
     private final UserRepository userRepository;
+    private final JavaMailSender javaMailSender;
 
     private final EventRepository eventRepository;
 
@@ -64,6 +67,8 @@ public class TicketService implements TicketServiceInterface {
 
         ticketRepository.save(currentTicket.setQrCode(currentTicket.getQrCode() + currentTicket.getId()));
 
+        sendMessageToCustomer(ownerEmail, currentTicket);
+
         return mapper.mapToDto(currentTicket, TicketModelDto.class);
     }
 
@@ -89,6 +94,24 @@ public class TicketService implements TicketServiceInterface {
                 .orElseThrow(() -> new TicketNotFoundException("Tickets not found"));
 
         return mapper.listToDto(ticketList, TicketModelDto.class);
+    }
+
+    private void sendMessageToCustomer(String customerEmail, Ticket currentTicket) {
+
+        Thread parallelEmailSendingThread = new Thread(() -> {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+            simpleMailMessage.setFrom("noreply@company.com");
+            simpleMailMessage.setTo(customerEmail);
+
+            simpleMailMessage.setSubject("COM.COMPANY: " + currentTicket.getEventHolding().getTitle() + " Ticket Order");
+            simpleMailMessage.setText("You are successfully ordered ticket!\n\nYour personal ticket code: "
+                    + currentTicket.getId() + "\n\nAnd QR-Code: " + currentTicket.getQrCode());
+
+            javaMailSender.send(simpleMailMessage);
+        });
+
+        parallelEmailSendingThread.start();
     }
 
 }
