@@ -2,10 +2,12 @@ package eu.senla.eventoservice.service.impl;
 
 import eu.senla.eventoservice.dto.OrderTicketRequestDto;
 import eu.senla.eventoservice.dto.TicketModelDto;
+import eu.senla.eventoservice.dto.TicketOrderDto;
 import eu.senla.eventoservice.exception.event.EventNotFoundException;
 import eu.senla.eventoservice.exception.location.OutOfLocationSpaceException;
 import eu.senla.eventoservice.exception.ticket.TicketNotFoundException;
 import eu.senla.eventoservice.exception.user.UserNotFoundException;
+import eu.senla.eventoservice.model.Credential;
 import eu.senla.eventoservice.model.Event;
 import eu.senla.eventoservice.model.Ticket;
 import eu.senla.eventoservice.model.User;
@@ -34,6 +36,7 @@ public class TicketService implements TicketServiceInterface {
     private String qrCodeGeneratorLink;
 
     private final UserRepository userRepository;
+
     private final JavaMailSender javaMailSender;
 
     private final EventRepository eventRepository;
@@ -44,11 +47,20 @@ public class TicketService implements TicketServiceInterface {
 
     @Override
     @Transactional
-    public TicketModelDto orderAnTicket(String ownerEmail, Long eventId) {
-        User currentUser = userRepository.getUserByCredential_Email(ownerEmail)
-                .orElseThrow(() -> new UserNotFoundException("Something went wrong"));
+    public TicketModelDto orderAnTicket(TicketOrderDto ticketOrderDto) {
+        User currentUser = userRepository.getUserByCredential_Email(ticketOrderDto.getEmail())
+                .orElseGet(() -> userRepository.save(new User()
+                        .setCredential(
+                                new Credential()
+                                .setEmail(ticketOrderDto.getEmail())
+                                .setPassword("nopassword"))
+                        .setFirstName(ticketOrderDto.getFirstName())
+                        .setSurname(ticketOrderDto.getSurname())
+                        .setPhoneNumber(ticketOrderDto.getPhoneNumber()))
+                );
+                //.orElseThrow(() -> new UserNotFoundException("Something went wrong"));
 
-        Event currentEvent = eventRepository.findById(eventId)
+        Event currentEvent = eventRepository.findById(ticketOrderDto.getEventId())
                         .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         if (currentEvent.getOccupiedPlace() + 1 > currentEvent.getLocation().getCapacity())
@@ -67,7 +79,7 @@ public class TicketService implements TicketServiceInterface {
 
         ticketRepository.save(currentTicket.setQrCode(currentTicket.getQrCode() + currentTicket.getId()));
 
-        sendMessageToCustomer(ownerEmail, currentTicket);
+        sendMessageToCustomer(ticketOrderDto.getEmail(), currentTicket);
 
         return mapper.mapToDto(currentTicket, TicketModelDto.class);
     }

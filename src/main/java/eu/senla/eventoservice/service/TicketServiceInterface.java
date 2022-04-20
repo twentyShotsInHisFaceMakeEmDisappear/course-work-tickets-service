@@ -2,6 +2,7 @@ package eu.senla.eventoservice.service;
 
 import eu.senla.eventoservice.dto.OrderTicketRequestDto;
 import eu.senla.eventoservice.dto.TicketModelDto;
+import eu.senla.eventoservice.dto.TicketOrderDto;
 
 import java.util.List;
 
@@ -13,6 +14,6 @@ public interface TicketServiceInterface {
 
     List<TicketModelDto> getAllTicketsByEventId(Long eventId);
 
-    TicketModelDto orderAnTicket(String ownerEmail, Long eventId);
+    TicketModelDto orderAnTicket(TicketOrderDto ticketOrderDto);
 
 }

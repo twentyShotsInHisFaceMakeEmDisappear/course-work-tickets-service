@@ -22,4 +22,12 @@ public class TicketOrderDto {
     @JsonProperty(value = "email")
     private String email;
 
+    @JsonProperty(value = "firstName")
+    private String firstName;
+
+    @JsonProperty(value = "surname")
+    private String surname;
+
+    @JsonProperty(value = "phoneNumber")
+    private String phoneNumber;
 }

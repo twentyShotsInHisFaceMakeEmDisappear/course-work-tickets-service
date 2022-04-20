@@ -29,8 +29,7 @@ public class TicketController {
     public String orderAnTicket(Model model,
                                  @ModelAttribute TicketOrderDto ticketOrder) {
 
-        TicketModelDto ticketModelDto = ticketService.orderAnTicket(ticketOrder.getEmail(),
-                ticketOrder.getEventId());
+        TicketModelDto ticketModelDto = ticketService.orderAnTicket(ticketOrder);
         model.addAttribute("ticket", ticketModelDto);
 
         return "tickets/ticket-order.html";

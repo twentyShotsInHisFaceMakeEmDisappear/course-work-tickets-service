@@ -43,6 +43,10 @@
     <form th:action="@{/tickets}" method="post" th:object="${orderDto}" target="_blank">
 
         <input th:field="*{email}" class="w3-input w3-border w3-center" style="margin-bottom: 10px; margin-top: 30px; margin-left: 240px; width: 300px" type="text" placeholder="Email" required name="Email">
+        <input th:field="*{firstName}" class="w3-input w3-border w3-center" style="margin-bottom: 10px; margin-top: 10px; margin-left: 240px; width: 300px" type="text" placeholder="Name" required name="Name">
+        <input th:field="*{surname}" class="w3-input w3-border w3-center" style="margin-bottom: 10px; margin-top: 10px; margin-left: 240px; width: 300px" type="text" placeholder="Surname" required name="Surname">
+        <input th:field="*{phoneNumber}" class="w3-input w3-border w3-center" style="margin-bottom: 10px; margin-top: 10px; margin-left: 240px; width: 300px" type="text" placeholder="Phone number" required name="Phone number">
+
         <input th:name="eventId" th:value="${currentEventId}" hidden="hidden" type="number">
 
         <button class="w3-button w3-black w3-section w3-right" style="margin-right: 225px" type="submit">Order</button>
