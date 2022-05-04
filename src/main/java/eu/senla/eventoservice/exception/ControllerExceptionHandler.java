@@ -14,6 +14,7 @@ import eu.senla.eventoservice.exception.role.RoleNotFoundException;
 import eu.senla.eventoservice.exception.ticket.TicketNotFoundException;
 import eu.senla.eventoservice.exception.user.UserDataMismatchException;
 import eu.senla.eventoservice.exception.user.UserNotFoundException;
+import org.apache.tomcat.util.http.fileupload.InvalidFileNameException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -50,7 +51,8 @@ public class ControllerExceptionHandler {
             EventTitleDuplicateException.class,
             LocationTitleDuplicateException.class,
             ArtistNicknameMismatchException.class,
-            CredentialWithSameDataAlreadyExistsException.class
+            CredentialWithSameDataAlreadyExistsException.class,
+            InvalidFileNameException.class
     })
     public String dataDuplicationException(Model model,
                                            RuntimeException exception) {

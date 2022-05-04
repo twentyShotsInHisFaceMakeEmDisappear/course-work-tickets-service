@@ -1,10 +1,12 @@
 package eu.senla.eventoservice.service.impl;
 
 import eu.senla.eventoservice.dto.OrderTicketRequestDto;
+import eu.senla.eventoservice.dto.PhoneNumberValidationDto;
 import eu.senla.eventoservice.dto.TicketModelDto;
 import eu.senla.eventoservice.dto.TicketOrderDto;
 import eu.senla.eventoservice.exception.event.EventNotFoundException;
 import eu.senla.eventoservice.exception.location.OutOfLocationSpaceException;
+import eu.senla.eventoservice.exception.phone.InvalidPhoneNumberException;
 import eu.senla.eventoservice.exception.ticket.TicketNotFoundException;
 import eu.senla.eventoservice.exception.user.UserNotFoundException;
 import eu.senla.eventoservice.model.Credential;
@@ -27,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,11 @@ public class TicketService implements TicketServiceInterface {
 
     @Value("${com.company.qrCode-link}")
     private String qrCodeGeneratorLink;
+
+    @Value("${com.company.validator-Link}")
+    private String phoneNumberValidatorLink;
+
+    private final RestTemplate restTemplate;
 
     private final UserRepository userRepository;
 
@@ -48,17 +56,28 @@ public class TicketService implements TicketServiceInterface {
     @Override
     @Transactional
     public TicketModelDto orderAnTicket(TicketOrderDto ticketOrderDto) {
-        User currentUser = userRepository.getUserByCredential_Email(ticketOrderDto.getEmail())
-                .orElseGet(() -> userRepository.save(new User()
-                        .setCredential(
-                                new Credential()
-                                .setEmail(ticketOrderDto.getEmail())
-                                .setPassword("nopassword"))
-                        .setFirstName(ticketOrderDto.getFirstName())
-                        .setSurname(ticketOrderDto.getSurname())
-                        .setPhoneNumber(ticketOrderDto.getPhoneNumber()))
-                );
-                //.orElseThrow(() -> new UserNotFoundException("Something went wrong"));
+
+        User currentUser;
+
+        if (userRepository.existsByCredentialEmail(ticketOrderDto.getEmail())) {
+            currentUser = userRepository.getUserByCredential_Email(ticketOrderDto.getEmail())
+                    .orElseThrow(() -> new UserNotFoundException("Something went wrong!"));
+        } else if (!Objects.requireNonNull(restTemplate.getForEntity(
+                phoneNumberValidatorLink + ticketOrderDto.getPhoneNumber(),
+                PhoneNumberValidationDto.class).getBody()).isValid()
+                || userRepository.existsByPhoneNumber(ticketOrderDto.getPhoneNumber())) {
+            throw new InvalidPhoneNumberException("Invalid phone number.");
+        } else {
+            currentUser = userRepository.save(new User().setCredential(
+                    new Credential()
+                            .setEmail(ticketOrderDto.getEmail())
+                            .setPassword("nopassword"))
+                    .setFirstName(ticketOrderDto.getFirstName())
+                    .setSurname(ticketOrderDto.getSurname())
+                    .setPhoneNumber(ticketOrderDto.getPhoneNumber()));
+        }
+
+        //.orElseThrow(() -> new UserNotFoundException("Something went wrong"));
 
         Event currentEvent = eventRepository.findById(ticketOrderDto.getEventId())
                         .orElseThrow(() -> new EventNotFoundException("Event not found"));
