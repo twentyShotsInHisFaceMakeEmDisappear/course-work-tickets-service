@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Calendar;
 
-@ControllerAdvice
+
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {

@@ -17,12 +17,12 @@ import lombok.experimental.Accessors;
 public class RequestStatusDto {
 
     @JsonProperty(value = "statusId")
-    private Integer statusId;
+    public Integer statusId;
 
     @JsonProperty(value = "message")
-    private String message;
+    public String message;
 
     @JsonProperty(value = "timespan")
-    private String timespan;
+    public String timespan;
 
 }

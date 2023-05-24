@@ -22,19 +22,20 @@ public class AuthenticationController {
     }
 
     @GetMapping("reg")
-    public String getRegistrationPage() {
+    public String getRegistrationPage(Model model) {
+        model.addAttribute("credentialModel", CredentialModelDto.builder().build());
 
         return "user/registration.html";
     }
 
     @PostMapping("account")
     public String createAnNewAccount(Model model,
-                                     @RequestBody CredentialModelDto credentialModel) {
+                                     @ModelAttribute CredentialModelDto credentialModel) {
 
         RequestStatusDto statusDto = credentialService.registeredAnAccount(credentialModel);
         model.addAttribute("status", statusDto);
 
-        return "account";
+        return "success.html";
     }
 
 }
