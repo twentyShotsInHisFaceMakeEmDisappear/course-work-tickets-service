@@ -10,6 +10,7 @@ import eu.senla.eventoservice.exception.event.EventTitleDuplicateException;
 import eu.senla.eventoservice.exception.location.LocationTitleDuplicateException;
 import eu.senla.eventoservice.exception.location.OutOfLocationSpaceException;
 import eu.senla.eventoservice.exception.other.CameNullEntityException;
+import eu.senla.eventoservice.exception.phone.InvalidPhoneNumberException;
 import eu.senla.eventoservice.exception.role.RoleNotFoundException;
 import eu.senla.eventoservice.exception.ticket.TicketNotFoundException;
 import eu.senla.eventoservice.exception.user.UserDataMismatchException;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Calendar;
 
-
+@ControllerAdvice
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {
@@ -52,7 +53,8 @@ public class ControllerExceptionHandler {
             LocationTitleDuplicateException.class,
             ArtistNicknameMismatchException.class,
             CredentialWithSameDataAlreadyExistsException.class,
-            InvalidFileNameException.class
+            InvalidFileNameException.class,
+            InvalidPhoneNumberException.class
     })
     public String dataDuplicationException(Model model,
                                            RuntimeException exception) {

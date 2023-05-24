@@ -42,7 +42,9 @@ public class CredentialService implements CredentialServiceInterface {
         Credential currentCredential = mapper.mapToEntity(registrationRequest, Credential.class);
 
         currentCredential.setRoles(new HashSet<>(){{ add(roleToGrant); }})
-                .setUser(new User().setCredential(currentCredential));
+                .setUser(new User().setCredential(currentCredential).setPhoneNumber(""));
+
+        credentialRepository.save(currentCredential);
 
         return new RequestStatusDto()
                 .setStatusId(HttpStatus.OK.value())

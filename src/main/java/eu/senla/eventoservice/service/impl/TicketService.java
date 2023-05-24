@@ -4,6 +4,7 @@ import eu.senla.eventoservice.dto.OrderTicketRequestDto;
 import eu.senla.eventoservice.dto.PhoneNumberValidationDto;
 import eu.senla.eventoservice.dto.TicketModelDto;
 import eu.senla.eventoservice.dto.TicketOrderDto;
+import eu.senla.eventoservice.exception.credential.CredentialsNotFoundException;
 import eu.senla.eventoservice.exception.event.EventNotFoundException;
 import eu.senla.eventoservice.exception.location.OutOfLocationSpaceException;
 import eu.senla.eventoservice.exception.phone.InvalidPhoneNumberException;
@@ -13,6 +14,7 @@ import eu.senla.eventoservice.model.Credential;
 import eu.senla.eventoservice.model.Event;
 import eu.senla.eventoservice.model.Ticket;
 import eu.senla.eventoservice.model.User;
+import eu.senla.eventoservice.repository.CredentialRepository;
 import eu.senla.eventoservice.repository.EventRepository;
 import eu.senla.eventoservice.repository.TicketRepository;
 import eu.senla.eventoservice.repository.UserRepository;
@@ -51,33 +53,33 @@ public class TicketService implements TicketServiceInterface {
 
     private final TicketRepository ticketRepository;
 
+    private final CredentialRepository credentialRepository;
+
     private final MapperInterface<TicketModelDto, Ticket> mapper;
 
     @Override
     @Transactional
     public TicketModelDto orderAnTicket(TicketOrderDto ticketOrderDto) {
 
+        Credential credential = credentialRepository.findByEmail(ticketOrderDto.getEmail())
+                .orElseThrow(() -> new CredentialsNotFoundException("Credentials was not found."));
+
         User currentUser;
 
         if (userRepository.existsByCredentialEmail(ticketOrderDto.getEmail())) {
             currentUser = userRepository.getUserByCredential_Email(ticketOrderDto.getEmail())
                     .orElseThrow(() -> new UserNotFoundException("Something went wrong!"));
-        } else if (!Objects.requireNonNull(restTemplate.getForEntity(
-                phoneNumberValidatorLink + ticketOrderDto.getPhoneNumber(),
-                PhoneNumberValidationDto.class).getBody()).isValid()
-                || userRepository.existsByPhoneNumber(ticketOrderDto.getPhoneNumber())) {
-            throw new InvalidPhoneNumberException("Invalid phone number.");
         } else {
-            currentUser = userRepository.save(new User().setCredential(
-                    new Credential()
-                            .setEmail(ticketOrderDto.getEmail())
-                            .setPassword("nopassword"))
-                    .setFirstName(ticketOrderDto.getFirstName())
-                    .setSurname(ticketOrderDto.getSurname())
-                    .setPhoneNumber(ticketOrderDto.getPhoneNumber()));
+            currentUser = userRepository.save(new User().setCredential(credential));
         }
 
-        //.orElseThrow(() -> new UserNotFoundException("Something went wrong"));
+        if (userRepository.existsByPhoneNumber(ticketOrderDto.getPhoneNumber())) {
+            throw new InvalidPhoneNumberException("Phone number is already exists.");
+        }
+
+        currentUser.setFirstName(ticketOrderDto.getFirstName());
+        currentUser.setSurname(ticketOrderDto.getSurname());
+        currentUser.setPhoneNumber(ticketOrderDto.getPhoneNumber());
 
         Event currentEvent = eventRepository.findById(ticketOrderDto.getEventId())
                         .orElseThrow(() -> new EventNotFoundException("Event not found"));
